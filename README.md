@@ -1,3 +1,3 @@
 # hydrogen_hub
 
-This code is a model of a hydrogen-based energy syste
+This code is a model of a hydrogen-based energy system!
