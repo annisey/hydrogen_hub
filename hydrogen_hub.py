@@ -69,27 +69,57 @@ def create_energy_system(config):
     return h2_hub
 
 
-#plot
+
+def optimizer(energy_system, config):
+    model = Model(energy_system)
+    model.solve(solver=config['solver'], solve_kwargs={'tee': True}) # "solve_kwargs={'tee': True}" to display solver's output
+    #main results contain data of each component and flow in energy system
+    #processing.results function gives back results as a python dictionary as pandas 
+    energy_system.results['main'] = processing.results(model) 
+    #meta results contain data of solver's performance and outcome
+    energy_system.results['meta'] = processing.meta_results(model)
+    # # Dump the energy system including the results (saving) for later analyzing of the results without running the whole code
+    energy_system.dump('U:\\ann82611\\04_Code\\hydrogen_hub\\hydrogen_hub\\h2_hub_dumps', 'h2_hub_dump.oemof')
+    #pp.pprint(energy_system.results['main'])
+    #pp.pprint(energy_system.results['meta'])
+    return energy_system
+
+
+#plot energy system
 def plot_energy_system(energy_system):
     graph = create_nx_graph(energy_system)
     networkx.draw(graph, with_labels=True, font_size=8)
     plt.show()
 
 
-def optimizer(energy_system, config):
-    model = Model(energy_system)
-    model.solve(solver=config['solver'])
-    energy_system.results["main"] = processing.results(model)
-    pp.pprint(f"{energy_system.results['main']}\n")
-    return energy_system
+def plot_results(energy_system):
+    main_results = energy_system.results['main']
+    
+    # Extract time series data
+    pv_generation = main_results[('pv', 'electricity')]['flow']['value']
+    wind_generation = main_results[('wind', 'electricity')]['flow']['value']
+    time_index = energy_system.timeindex
+    
+    # Plot PV and wind generation
+    plt.figure(figsize=(10, 6))
+    plt.plot(time_index, pv_generation, label='PV Generation')
+    plt.plot(time_index, wind_generation, label='Wind Generation')
+    plt.xlabel('Time')
+    plt.ylabel('Electricity Generation (MW)')
+    plt.legend()
+    plt.title('Electricity Generation from PV and Wind')
+    plt.show()
+
+    
 
 
 def main():
     config = load_config('config.yaml') #enter relative file path config file
     h2_hub = create_energy_system(config)
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
-    plot_energy_system(h2_hub)
-
+    #plot_energy_system(h2_hub)
+    #plot_results(h2_hub)
+    
 
 if __name__ == "__main__":
     main() 

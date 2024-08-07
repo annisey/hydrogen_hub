@@ -4,12 +4,12 @@
 #pv settings
 pv_data_path: "U:\\ann82611\\04_Code\\hydrogen_hub\\hydrogen_hub\\solar_power_northern_germany.csv"
 pv_data_column: "Solar Power"  #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
-pv_nominal_value: 5000000  # pv_nominal_value [W], e.g. 5000000 = 5MW
+pv_nominal_value: 50000000  # pv_nominal_value [W], e.g. 5000000 = 5MW
 
 #wind settings
 wind_data_path: "U:\\ann82611\\04_Code\\hydrogen_hub\\hydrogen_hub\\wind_power_northern_germany.csv"
 wind_data_column: "Wind Power" #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
-wind_nominal_value: 10000000  # wind_nominal_value [W], e.g. 10000000 = 10MW
+wind_nominal_value: 100000000  # wind_nominal_value [W], e.g. 10000000 = 10MW
 
 #solver settings
 solver: "cbc" #decide which solver is chosen... (garubi, glpk,...)
