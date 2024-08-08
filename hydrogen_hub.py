@@ -2,12 +2,11 @@ import oemof.solph as solph
 from oemof.solph.components import Sink, Source, Converter, GenericStorage
 from oemof.solph import create_time_index, Bus, Flow, Model, processing
 
-import pprint as pp
-
 #for plotting
-import networkx
-from oemof.network.graph import create_nx_graph
-import matplotlib.pyplot as plt
+from plot_graph import plot_energy_system
+# import pprint as pp
+from print_results import plot_results
+ 
 #for config file and opening data
 import yaml
 import pandas as pd
@@ -51,7 +50,7 @@ def create_energy_system(config):
     grid_source = Source(label='grid', outputs={electricity_bus: Flow(fix=1, nominal_value=100000000)}) #100MW (?)
 
     h2_ship_source = Source(label='h2_ship', outputs={h2_to_storage_bus: Flow(fix=1, nominal_value=500, variable_costs=50)}) # Einheit check
-    electrolyzer = Converter(label='electrolyzer', inputs={electricity_bus: Flow()},outputs={h2_to_storage_bus: Flow()}, conversion_factors={h2_to_storage_bus: 0.25}) #conversion factor and Flow tbd
+    electrolyzer = Converter(label='electrolyzer', inputs={electricity_bus: Flow(fix=1, nominal_value=50000000)},outputs={h2_to_storage_bus: Flow()}, conversion_factors={h2_to_storage_bus: 0.25}) #conversion factor and Flow tbd
 
     h2_hub.add(pv_source, wind_source, grid_source, h2_ship_source, electrolyzer)
 
@@ -69,10 +68,9 @@ def create_energy_system(config):
     return h2_hub
 
 
-
 def optimizer(energy_system, config):
     model = Model(energy_system)
-    model.solve(solver=config['solver'], solve_kwargs={'tee': True}) # "solve_kwargs={'tee': True}" to display solver's output
+    model.solve(solver=config['solver']) # "solve_kwargs={'tee': True}" to display solver's output
     #main results contain data of each component and flow in energy system
     #processing.results function gives back results as a python dictionary as pandas 
     energy_system.results['main'] = processing.results(model) 
@@ -85,40 +83,15 @@ def optimizer(energy_system, config):
     return energy_system
 
 
-#plot energy system
-def plot_energy_system(energy_system):
-    graph = create_nx_graph(energy_system)
-    networkx.draw(graph, with_labels=True, font_size=8)
-    plt.show()
 
-
-def plot_results(energy_system):
-    main_results = energy_system.results['main']
-    
-    # Extract time series data
-    pv_generation = main_results[('pv', 'electricity')]['flow']['value']
-    wind_generation = main_results[('wind', 'electricity')]['flow']['value']
-    time_index = energy_system.timeindex
-    
-    # Plot PV and wind generation
-    plt.figure(figsize=(10, 6))
-    plt.plot(time_index, pv_generation, label='PV Generation')
-    plt.plot(time_index, wind_generation, label='Wind Generation')
-    plt.xlabel('Time')
-    plt.ylabel('Electricity Generation (MW)')
-    plt.legend()
-    plt.title('Electricity Generation from PV and Wind')
-    plt.show()
-
-    
 
 
 def main():
     config = load_config('config.yaml') #enter relative file path config file
     h2_hub = create_energy_system(config)
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
-    #plot_energy_system(h2_hub)
-    #plot_results(h2_hub)
+    plot_energy_system(h2_hub)
+    plot_results(h2_hub)
     
 
 if __name__ == "__main__":
