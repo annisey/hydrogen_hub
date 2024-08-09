@@ -1,9 +1,6 @@
-import oemof.solph as solph
 from oemof.solph import views
 # import pprint as pp
 import matplotlib.pyplot as plt
-
-from restore_and_plot import restore_energy_system
 
 
 def plot_figures_for(element: dict) -> None:
@@ -27,12 +24,3 @@ def plot_results(energy_system):
     electricity_bus = views.node(main_results, 'electricity')
 
     plot_figures_for(electricity_bus)
-
-
-def main():
-    h2_hub = restore_energy_system(file_path='U:\\ann82611\\04_Code\\hydrogen_hub\\hydrogen_hub\\h2_hub_dumps')
-    plot_results(h2_hub)
-
-
-if __name__ == "__main__":
-    main()
