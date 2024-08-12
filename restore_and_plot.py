@@ -1,6 +1,6 @@
+import os
 import oemof.solph as solph
-from print_results import plot_results
-
+from plot_results import plot_results
 
 
 def restore_energy_system(file_path):
@@ -10,8 +10,10 @@ def restore_energy_system(file_path):
 
 
 def main():
-    h2_hub = restore_energy_system(file_path='U:\\ann82611\\04_Code\\hydrogen_hub\\hydrogen_hub\\h2_hub_dumps')
-    plot_results(h2_hub)
+    relative_path = os.path.join(os.path.dirname(__file__), 'h2_hub_dumps')
+    h2_hub = restore_energy_system(file_path=relative_path)
+    plot_results(h2_hub) 
+    return 0
 
 
 if __name__ == "__main__":

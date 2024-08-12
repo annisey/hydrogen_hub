@@ -1,6 +1,6 @@
 import pytest
 
-from hydrogen_hub import get_grid_nominal_value, get_csv_data, load_config
+from src.hydrogen_hub import get_grid_nominal_value, get_csv_data, load_config
 
 def main():
     test_grid_value_input()

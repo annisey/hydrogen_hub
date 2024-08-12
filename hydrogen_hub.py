@@ -5,14 +5,14 @@ from oemof.solph import create_time_index, Bus, Flow, Model, processing
 #for plotting
 from plot_graph import plot_energy_system
 # import pprint as pp
-from print_results import plot_results
+from plot_results import plot_results
  
 #for config file and opening data
 import yaml
 import pandas as pd
 
 import sys
-
+import os
 
 
 #load config file (where parameters are set)
@@ -95,8 +95,8 @@ def optimizer(energy_system, config):
     energy_system.results['main'] = processing.results(model) 
     #meta results contain data of solver's performance and outcome
     energy_system.results['meta'] = processing.meta_results(model)
-    # # Dump the energy system including the results (saving) for later analyzing of the results without running the whole code
-    energy_system.dump('U:\\ann82611\\04_Code\\hydrogen_hub\\hydrogen_hub\\h2_hub_dumps', 'h2_hub_dump.oemof')
+    # Dump the energy system including the results (saving) for later analyzing of the results without running the whole code
+    energy_system.dump('h2_hub_dumps', 'h2_hub_dump.oemof')
     #pp.pprint(energy_system.results['main'])
     #pp.pprint(energy_system.results['meta'])
     return energy_system
@@ -107,12 +107,12 @@ def main():
     
     grid_nominal_value_input = input("Grid Nominal Value [MW] (value must be between 50 MW and 500 MW): ")
     
-    
     config['grid_nominal_value'] = get_grid_nominal_value(grid_nominal_value_input) #update config file according to user input
     h2_hub = create_energy_system(config)
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
     plot_energy_system(h2_hub)
-    plot_results(h2_hub)
+    plot_results(h2_hub) 
+    return 0
     
 
 if __name__ == "__main__":
