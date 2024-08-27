@@ -12,7 +12,7 @@ wind_data_column: "Wind Power" #enter name of the column to get normed fixed val
 wind_nominal_value: 80000000  # wind_nominal_value [W], e.g. 10000000 = 10MW
 
 # grid settings
-grid_nominal_value: 100000000
+grid_nominal_value: 100000000 #to make dynamic
 grid_variable_costs: 2
 
 # h2_ship_source settings

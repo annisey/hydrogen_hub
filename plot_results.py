@@ -3,7 +3,7 @@ from oemof.solph import views
 import matplotlib.pyplot as plt
 
 
-def plot_figures_for(element: dict) -> None:
+def plot_figures_for(element):
     figure, axes = plt.subplots(figsize=(10, 5))
     element["sequences"].plot(ax=axes, kind="line", drawstyle="steps-post")
     plt.legend(
@@ -16,7 +16,7 @@ def plot_figures_for(element: dict) -> None:
     plt.show()
 
 
-def plot_results(energy_system):
+def plot_result(energy_system):
     main_results = energy_system.results['main']
     #pp.pprint(main_results)
 
@@ -24,3 +24,5 @@ def plot_results(energy_system):
     electricity_bus = views.node(main_results, 'electricity')
 
     plot_figures_for(electricity_bus)
+
+    

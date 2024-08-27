@@ -3,12 +3,12 @@ import pytest
 from hydrogen_hub import get_grid_nominal_value, get_csv_data, load_config
 
 def main():
-    test_grid_value_input()
+    test_get_grid_nominal_value()
     test_get_csv_data()
     test_load_config()
 
 
-def test_grid_value_input():
+def test_get_grid_nominal_value():
     assert get_grid_nominal_value("100")  == 100000000.0
     assert get_grid_nominal_value("500")  == 500000000.0
     assert get_grid_nominal_value("50")  == 50000000.0
