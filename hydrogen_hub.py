@@ -14,7 +14,6 @@ import pandas as pd
 import sys
 
 
-
 #load config file (where parameters are set)
 def load_config(file_path):
     with open(file_path, 'r') as file:
